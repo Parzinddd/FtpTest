@@ -9,6 +9,7 @@ import com.example.ftptest.utils.ConfigRead;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 
@@ -16,6 +17,7 @@ public class ThreadController extends Thread{
     Logger logger = Logger.getLogger(ThreadController.class);
     //TODO: 判断isActive 区分主动与被动模式 不加命令 在命令里面改
     private int count=0;
+    private boolean isActive = true;
     //tcp连接
     private Socket socket;
     //用户
@@ -30,18 +32,13 @@ public class ThreadController extends Thread{
 
     //当前目录
     private String dir = ConfigRead.rootDir;
-    private String mode="control";
 
+    private ServerSocket serverSocket;
     public ThreadController(Socket socket) {
         this.socket = socket;
     }
 
     //传输数据模式的构造函数
-    public ThreadController(Socket socket,String mode)
-    {
-        this.socket=socket;
-        this.mode=mode;
-    }
     public void run() {
         logger.debug("a new client is connected ============= ");
         BufferedReader reader;
@@ -50,7 +47,7 @@ public class ThreadController extends Thread{
             Writer writer = new OutputStreamWriter(socket.getOutputStream());
             while(true) {
                 //第一次访问，输入流里面是没有东西的，所以会阻塞住
-                if(count == 0 && this.mode.equals("control"))
+                if(count == 0 )
                 {
                     writer.write("220 welcome my ftp server, Server ready.\r\n");
 //                    writer.write("");
@@ -147,5 +144,20 @@ public class ThreadController extends Thread{
 
     public String getDataPort() {
         return dataPort;
+    }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public void setServerSocket(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
+    }
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

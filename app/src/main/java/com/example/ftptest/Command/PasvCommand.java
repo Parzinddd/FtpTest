@@ -18,7 +18,6 @@ public class PasvCommand implements Command {
         logger.debug("execute the PASV command...");
         String response = "";
         try{
-
             int tempPort = -1 ;
             ServerSocket serverSocket = null;
             while (serverSocket==null){
@@ -29,14 +28,16 @@ public class PasvCommand implements Command {
                 response = "271 Entering Passive Mode "+tempPort;
                 logger.debug(response);
             }
+
+//            Socket dataSocket;
+//            dataSocket = serverSocket.accept();
+//            t.setDataSocket(dataSocket);
+            t.setServerSocket(serverSocket);
+            t.setActive(false);
+
             writer.write(response);
             writer.write("\r\n");
             writer.flush();
-
-            Socket dataSocket;
-            dataSocket = serverSocket.accept();
-            ThreadController thread = new ThreadController(dataSocket,"data");
-            thread.start();
 
 
         } catch (Exception e) {

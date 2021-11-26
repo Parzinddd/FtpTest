@@ -23,12 +23,19 @@ public class RetrCommand implements Command {
             try {
                 writer.write("150 open ascii mode...\r\n");
                 writer.flush();
-                s = new Socket(t.getDataIp(), Integer.parseInt(t.getDataPort()));
-                BufferedOutputStream dataOut = new BufferedOutputStream(s.getOutputStream());
+                BufferedOutputStream dataOut;
+                if (t.isActive()) {
+                    s = new Socket(t.getDataIp(), Integer.parseInt(t.getDataPort()));
+                    dataOut = new BufferedOutputStream(s.getOutputStream());
+                }else {
+                    s = t.getServerSocket().accept();
+                    dataOut = new BufferedOutputStream(s.getOutputStream());
+                }
                 byte[] buf = new byte[1024];
-                InputStream is = new FileInputStream(file);
-                while(-1 != is.read(buf)) {
-                    dataOut.write(buf);
+                FileInputStream is = new FileInputStream(file);
+                int bytes;
+                while((bytes = is.read(buf))!= -1 ) {
+                    dataOut.write(buf,0,bytes);
                 }
                 dataOut.flush();
                 s.close();

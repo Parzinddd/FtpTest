@@ -26,7 +26,7 @@ public class CommandController {
 
             case "STOR":return new StorCommand();
 
-//            case "PASV":return new PasvCommand();
+            case "PASV":return new PasvCommand();
 
             default :return null;
         }

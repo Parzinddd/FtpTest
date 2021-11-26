@@ -15,6 +15,9 @@ public class QuitCommand implements Command {
             writer.flush();
             writer.close();
             t.getSocket().close();
+            if (!t.isActive()){
+                t.getServerSocket().close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
