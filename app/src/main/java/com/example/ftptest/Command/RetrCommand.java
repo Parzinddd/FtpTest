@@ -10,12 +10,12 @@ import java.net.Socket;
 
 
 public class RetrCommand implements Command {
-    Logger logger = Logger.getLogger(RetrCommand.class);
+//    Logger logger = Logger.getLogger(RetrCommand.class);
     @Override
     public void getResult(String data, Writer writer, ThreadController t) {
         Socket s;
         String desDir = t.getDir()+ File.separator+"data"+File.separator+data;
-        logger.debug(desDir);
+//        logger.debug(desDir);
         File file = new File(desDir);
         System.out.println(desDir);
         if(file.exists())

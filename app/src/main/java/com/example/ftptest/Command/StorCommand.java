@@ -11,7 +11,7 @@ import java.io.Writer;
 import java.net.Socket;
 
 public class StorCommand implements Command {
-    Logger logger = Logger.getLogger(StorCommand.class);
+//    Logger logger = Logger.getLogger(StorCommand.class);
     @Override
     public void getResult(String data, Writer writer, ThreadController t) {
         try{
@@ -34,7 +34,7 @@ public class StorCommand implements Command {
             while((bytes = inSocket.read(byteBuffer) )!= -1){
                 inFile.write(byteBuffer, 0, bytes);
             }
-            logger.debug("传输完成，关闭连接");
+//            logger.debug("传输完成，关闭连接");
             inFile.close();
             inSocket.close();
             tempSocket.close();
