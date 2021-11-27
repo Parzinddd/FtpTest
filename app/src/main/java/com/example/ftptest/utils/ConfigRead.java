@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 public class ConfigRead {
-    public static Logger configLogger = Logger.getLogger(ConfigRead.class);
+//    public static Logger configLogger = Logger.getLogger(ConfigRead.class);
     /*根目录的路径*/
 //    public static  String rootDir = new File("").getAbsolutePath();//获取当前文件的绝对路径
 
-    public static  String rootDir = System.getProperty("user.dir") + "/data";
+    public static  String rootDir = System.getProperty("user.dir");
     /*允许登录的用户*/
     public static Map<String,String> users = new HashMap<String,String>();
 
@@ -42,7 +42,7 @@ public class ConfigRead {
             rootDir = root.getChildText("rootDir");
 //            System.out.print("rootDir is:");
 //            System.out.println(rootDir);
-            configLogger.debug("rootDir is: "+rootDir);
+//            configLogger.debug("rootDir is: "+rootDir);
 
             //允许登录的用户
             Element usersE = root.getChild("users");
@@ -55,8 +55,8 @@ public class ConfigRead {
                 password = user.getChildText("password");
 //                System.out.println("用户名："+username);
 //                System.out.println("密码："+password);
-                configLogger.debug("用户名： "+username);
-                configLogger.debug("密码： "+password);
+//                configLogger.debug("用户名： "+username);
+//                configLogger.debug("密码： "+password);
                 users.put(username,password);
             }
 
