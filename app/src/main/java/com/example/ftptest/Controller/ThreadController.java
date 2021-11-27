@@ -6,7 +6,7 @@ import com.example.ftptest.Command.UserCommand;
 import com.example.ftptest.inf.Command;
 import com.example.ftptest.utils.ConfigRead;
 
-import org.apache.log4j.Logger;
+
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -14,7 +14,7 @@ import java.net.Socket;
 
 
 public class ThreadController extends Thread{
-    Logger logger = Logger.getLogger(ThreadController.class);
+//    Logger logger = Logger.getLogger(ThreadController.class);
     //TODO: 判断isActive 区分主动与被动模式 不加命令 在命令里面改
     private int count=0;
     private boolean isActive = true;
@@ -40,7 +40,7 @@ public class ThreadController extends Thread{
 
     //传输数据模式的构造函数
     public void run() {
-        logger.debug("a new client is connected ============= ");
+//        logger.debug("a new client is connected ============= ");
         BufferedReader reader;
         try {
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -100,7 +100,7 @@ public class ThreadController extends Thread{
         }
         finally {
 //            System.out.println("结束tcp连接");
-            logger.debug("结束tcp连接");
+//            logger.debug("结束tcp连接");
         }
 
     }

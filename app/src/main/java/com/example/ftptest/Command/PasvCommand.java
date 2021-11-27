@@ -12,10 +12,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class PasvCommand implements Command {
-    Logger logger = Logger.getLogger(PasvCommand.class);
+//    Logger logger = Logger.getLogger(PasvCommand.class);
     @Override
     public void getResult(String data, Writer writer, ThreadController t) {
-        logger.debug("execute the PASV command...");
+//        logger.debug("execute the PASV command...");
         String response = "";
         try{
             int tempPort = -1 ;
@@ -26,7 +26,7 @@ public class PasvCommand implements Command {
             }
             if (tempPort != -1 && serverSocket != null){
                 response = "271 Entering Passive Mode "+tempPort;
-                logger.debug(response);
+//                logger.debug(response);
             }
 
 //            Socket dataSocket;
