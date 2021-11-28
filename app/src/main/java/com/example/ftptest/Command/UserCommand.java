@@ -1,9 +1,7 @@
 package com.example.ftptest.Command;
-
-import com.example.ftptest.Controller.ThreadController;
-import com.example.ftptest.inf.Command;
-import com.example.ftptest.utils.ConfigRead;
-
+import  com.example.ftptest.Controller.ThreadController;
+import  com.example.ftptest.inf.Command;
+import  com.example.ftptest.utils.ConfigRead;
 
 import java.io.IOException;
 import java.io.Writer;

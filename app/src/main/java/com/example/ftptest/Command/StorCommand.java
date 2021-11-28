@@ -1,8 +1,9 @@
 package com.example.ftptest.Command;
 
-import com.example.ftptest.Controller.ThreadController;
-import com.example.ftptest.inf.Command;
-import org.apache.log4j.Logger;
+import  com.example.ftptest.Controller.ThreadController;
+import  com.example.ftptest.inf.Command;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,19 +12,19 @@ import java.io.Writer;
 import java.net.Socket;
 
 public class StorCommand implements Command {
-//    Logger logger = Logger.getLogger(StorCommand.class);
+
     @Override
     public void getResult(String data, Writer writer, ThreadController t) {
         try{
             writer.write("150 Binary data connection\r\n");
             writer.flush();
-            RandomAccessFile inFile = new RandomAccessFile(t.getDir()+"/data/"+data,"rw");
+            RandomAccessFile inFile = new RandomAccessFile(t.getDir()+"/"+data,"rw");
             InputStream inSocket;
             Socket tempSocket = null;
             if (t.isActive()){
-                //数据连接
-                tempSocket = new Socket(t.getDataIp(),Integer.parseInt(t.getDataPort()));
-                inSocket = tempSocket.getInputStream();
+            //数据连接
+             tempSocket = new Socket(t.getDataIp(),Integer.parseInt(t.getDataPort()));
+             inSocket = tempSocket.getInputStream();
             }else {
                 tempSocket = t.getServerSocket().accept();
                 inSocket = tempSocket.getInputStream();
@@ -34,14 +35,16 @@ public class StorCommand implements Command {
             while((bytes = inSocket.read(byteBuffer) )!= -1){
                 inFile.write(byteBuffer, 0, bytes);
             }
-//            logger.debug("传输完成，关闭连接");
+            EventBus.getDefault().post("传输完成，关闭连接");
             inFile.close();
             inSocket.close();
             tempSocket.close();
+
             //断开数据连接
 
             writer.write("226 transfer complete\r\n");
             writer.flush();
+
         }
         catch(IOException e){
             e.printStackTrace();

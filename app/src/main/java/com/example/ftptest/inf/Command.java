@@ -1,6 +1,5 @@
 package com.example.ftptest.inf;
-import com.example.ftptest.Controller.ThreadController;
-
+import  com.example.ftptest.Controller.*;
 
 import java.io.Writer;
 

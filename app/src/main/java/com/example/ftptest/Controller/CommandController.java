@@ -1,20 +1,15 @@
 package com.example.ftptest.Controller;
 
-import com.example.ftptest.Command.*;
-import com.example.ftptest.inf.Command;
-
+import  com.example.ftptest.inf.Command;
+import  com.example.ftptest.Command.*;
 
 public class CommandController {
     public static Command createCommand(String order) {
-
         order = order.toUpperCase();
-        switch(order)
-        {
+        switch(order) {
             case "USER":return new UserCommand();
 
             case "PASS":return new PassCommand();
-
-//            case "LIST":return new DirCommand();
 
             case "MYPORT":return new PortCommand();
 
@@ -22,13 +17,17 @@ public class CommandController {
 
             case "RETR":return new RetrCommand();
 
-//            case "CWD":return new CwdCommand();
+            case "TYPE":return new TypeCommand();
 
             case "STOR":return new StorCommand();
 
             case "PASV":return new PasvCommand();
 
-            default :return null;
+            case "MODE":return new ModeCommand();
+
+            case "STRU":return new StruCommand();
+
+            default :return new NoopCommand();
         }
 
     }

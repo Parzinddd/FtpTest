@@ -1,10 +1,8 @@
 package com.example.ftptest.Command;
 
-
-import com.example.ftptest.Controller.ThreadController;
-import com.example.ftptest.inf.Command;
-import com.example.ftptest.utils.ConfigRead;
-import org.apache.log4j.Logger;
+import  com.example.ftptest.Controller.ThreadController;
+import  com.example.ftptest.inf.Command;
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -12,10 +10,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class PasvCommand implements Command {
-//    Logger logger = Logger.getLogger(PasvCommand.class);
+
     @Override
     public void getResult(String data, Writer writer, ThreadController t) {
-//        logger.debug("execute the PASV command...");
+        EventBus.getDefault().post("execute the PASV command...");
         String response = "";
         try{
             int tempPort = -1 ;
@@ -26,7 +24,7 @@ public class PasvCommand implements Command {
             }
             if (tempPort != -1 && serverSocket != null){
                 response = "271 Entering Passive Mode "+tempPort;
-//                logger.debug(response);
+                EventBus.getDefault().post(response);
             }
 
 //            Socket dataSocket;
@@ -38,8 +36,6 @@ public class PasvCommand implements Command {
             writer.write(response);
             writer.write("\r\n");
             writer.flush();
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,23 +1,23 @@
 package com.example.ftptest.Controller;
 
-import com.example.ftptest.Command.PassCommand;
-import com.example.ftptest.Command.UserCommand;
+import  com.example.ftptest.inf.Command;
 
-import com.example.ftptest.inf.Command;
-import com.example.ftptest.utils.ConfigRead;
-
-
+import  com.example.ftptest.utils.ConfigRead;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import  com.example.ftptest.Command.*;
 
+import org.greenrobot.eventbus.EventBus;
 
 public class ThreadController extends Thread{
-//    Logger logger = Logger.getLogger(ThreadController.class);
-    //TODO: 判断isActive 区分主动与被动模式 不加命令 在命令里面改
-    private int count=0;
+
+
+
     private boolean isActive = true;
+
+    private int count=0;
     //tcp连接
     private Socket socket;
     //用户
@@ -31,26 +31,39 @@ public class ThreadController extends Thread{
     private boolean isLogin = false;
 
     //当前目录
-    private String dir = ConfigRead.rootDir;
+    private String dir = ConfigRead.rootDir+File.separator+"data";
+    //被动模式数据连接开放端口
 
     private ServerSocket serverSocket;
+
+    public enum TransferType {
+        ASCII, BINARY
+    };
+
+    private TransferType type = TransferType.BINARY;
+
+    public enum TransferMode {
+        BLOCK,STREAM,ZIP
+    };
+
+    private TransferMode mode = TransferMode.STREAM;
+
     public ThreadController(Socket socket) {
         this.socket = socket;
     }
 
-    //传输数据模式的构造函数
+
+
     public void run() {
-//        logger.debug("a new client is connected ============= ");
+        EventBus.getDefault().post("a new client is connected ============= ");
         BufferedReader reader;
         try {
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             Writer writer = new OutputStreamWriter(socket.getOutputStream());
             while(true) {
                 //第一次访问，输入流里面是没有东西的，所以会阻塞住
-                if(count == 0 )
-                {
+                if(count == 0) {
                     writer.write("220 welcome my ftp server, Server ready.\r\n");
-//                    writer.write("");
                     writer.flush();
                     count++;
                 }
@@ -63,6 +76,7 @@ public class ThreadController extends Thread{
 //                        logger.debug("order: "+ command);
                         if(command !=null) {
                             String[] datas = command.split(" ");
+                            System.out.println(datas[0]);
                             Command commandSolver = CommandController.createCommand(datas[0]);
 
                             //登录验证,在没有登录的情况下，无法使用除了user,pass之外的命令
@@ -100,9 +114,8 @@ public class ThreadController extends Thread{
         }
         finally {
 //            System.out.println("结束tcp连接");
-//            logger.debug("结束tcp连接");
+            EventBus.getDefault().post("结束tcp连接");
         }
-
     }
     public  boolean loginValiate(Command command) {
         if(command instanceof UserCommand || command instanceof PassCommand) {
@@ -146,13 +159,7 @@ public class ThreadController extends Thread{
         return dataPort;
     }
 
-    public ServerSocket getServerSocket() {
-        return serverSocket;
-    }
 
-    public void setServerSocket(ServerSocket serverSocket) {
-        this.serverSocket = serverSocket;
-    }
     public boolean isActive() {
         return isActive;
     }
@@ -160,4 +167,26 @@ public class ThreadController extends Thread{
     public void setActive(boolean active) {
         isActive = active;
     }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
+    }
+
+    public void setServerSocket(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
+    }
+
+    public TransferType getType() {
+        return type;
+    }
+
+    public void setType(TransferType type) {
+        this.type = type;
+    }
+
+    public void setMode(TransferMode mode) {
+        this.mode = mode;
+    }
+
+
 }
