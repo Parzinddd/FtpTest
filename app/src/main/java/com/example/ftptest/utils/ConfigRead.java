@@ -23,6 +23,8 @@ public class ConfigRead {
 
     //初始化根目录，权限用户，能够登录的用户信息
     public static void read() {
-
+        users.put("admin","000000");
+        users.put("ANONYMOUS","000000");
+        users.put("test","test");
     }
 }
