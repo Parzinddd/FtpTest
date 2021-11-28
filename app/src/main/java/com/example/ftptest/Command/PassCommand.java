@@ -3,6 +3,9 @@ package com.example.ftptest.Command;
 import com.example.ftptest.Controller.ThreadController;
 import com.example.ftptest.inf.Command;
 import com.example.ftptest.utils.ConfigRead;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 
 import org.apache.log4j.Logger;
@@ -24,6 +27,7 @@ public class PassCommand implements Command {
         String response = null;
         if(pass.equals(data)) {
             logger.debug("登录成功");
+            EventBus.getDefault().post("登录成功");
             ConfigRead.loginUser.add(key);
             t.setLogin(true);
             response = "230 User "+key+" logged in";

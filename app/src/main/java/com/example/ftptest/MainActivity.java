@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.util.Log;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 
@@ -23,40 +27,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText portNumTextview;
     //显示log的卷轴（
     private ScrollView logScrollView;
+    private TextView logTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        EventBus.getDefault().register(this);
+        logTextView = findViewById(R.id.logText);
         confirmButton = findViewById(R.id.confirm_button);
         logSwitch = findViewById(R.id.log_switch);
         portNumTextview = findViewById(R.id.editTextPortNum);
         logScrollView = findViewById(R.id.logScrollView);
         confirmButton.setOnClickListener(this);
-
-//        confirmButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Editable portnumEditable = portNumTextview.getText();
-//                String portnumString = portnumEditable.toString();
-//                int portnum=Integer.parseInt(portnumString);
-//                try {
-//                    FtpServer server = new FtpServer(portnum);
-//                    server.listen();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
-
-
-
-//        try {
-//            FtpServer server = new FtpServer(21);
-//            server.listen();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
     }
 
@@ -65,14 +48,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Editable portnumEditable = portNumTextview.getText();
             String portnumString = portnumEditable.toString();
             int portnum=Integer.parseInt(portnumString);
-            try {
-                Log.i("njy","njy");
-                FtpServer server = new FtpServer(portnum);
-                Log.i("njy2","njy2");
-                server.listen();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            EventBus.getDefault().post("即将开启服务器");
+            new Thread(new Runnable(){
+                @Override
+                public void run() {
+                    try {
+                        Log.i("njy","njy");
+//                        EventBus.getDefault().post("登录成功");
+                        FtpServer server = new FtpServer(portnum);
+                        Log.i("njy2","njy2");
+                        server.listen();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetMessage(String s) {
+
+        logTextView.setText(s);
+
     }
 }
